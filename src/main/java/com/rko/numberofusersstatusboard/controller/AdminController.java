@@ -2,6 +2,9 @@ package com.rko.numberofusersstatusboard.controller;
 
 import com.rko.numberofusersstatusboard.constant.EventStatus;
 import com.rko.numberofusersstatusboard.constant.PlaceType;
+import com.rko.numberofusersstatusboard.dto.EventDTO;
+import com.rko.numberofusersstatusboard.dto.PlaceDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,17 +35,29 @@ public class AdminController {
     }
 
     @GetMapping("/places/{placeId}")
-    public String adminPlaceDetail(@PathVariable Integer placeId) {
-        return "admin/places-detail";
+    public ModelAndView adminPlaceDetail(@PathVariable Long placeId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("place", PlaceDTO.of(
+                PlaceType.COMMON,
+                "게이트볼장",
+                "대전시 유성구 유성대로 882",
+                "010-2222-3333",
+                15,
+                "신장개업 ",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        ));
+
+        return new ModelAndView("admin/places-detail", map);
     }
 
     @GetMapping("/events")
     public ModelAndView adminEvents(
-            Integer placeId,
+            Long placeId,
             String eventName,
             EventStatus eventStatus,
-            LocalDateTime eventStartDatetime,
-            LocalDateTime eventEndDatetime
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
     ) {
         Map<String, Object> map = new HashMap<>();
         map.put("placeName", "place-"+placeId);
@@ -55,7 +70,21 @@ public class AdminController {
     }
 
     @GetMapping("/places/{eventId}")
-    public String adminEventDetail(@PathVariable Integer eventId) {
-        return "admin/event-detail";
+    public ModelAndView adminEventDetail(@PathVariable Long eventId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("event", EventDTO.of(
+                1L,
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(2023, 1, 1, 13,0,0),
+                LocalDateTime.of(2023, 1, 1, 16,0,0),
+                0,
+                30,
+                "마스크 꼭 착용하세요",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        ));
+
+        return new ModelAndView("admin/event-detail", map);
     }
 }
