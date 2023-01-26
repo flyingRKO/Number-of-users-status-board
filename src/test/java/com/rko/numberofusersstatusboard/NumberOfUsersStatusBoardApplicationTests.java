@@ -13,10 +13,5 @@ class NumberOfUsersStatusBoardApplicationTests {
     void contextLoads() {
     }
 
-    //TODO: 불필요해지면 나중에 지울 것
-    @TestConfiguration
-    static class TestConfig {
-        @Bean
-        EventRepository eventRepository() { return new EventRepository() {}; }
-    }
+   
 }
