@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +44,7 @@ class EventServiceTest {
 
         // Then
         assertThat(list).hasSize(2);
-        verify(eventRepository).findEvents(null,null,null,null,null);
+        then(eventRepository).should().findEvents(null,null,null,null,null);
     }
 
     @DisplayName("검색 조건과 함께 이벤트를 검색하면, 검색 결과를 출력하여 보여준다.")
@@ -77,7 +78,7 @@ class EventServiceTest {
                             assertThat(event.eventStartDatetime()).isAfterOrEqualTo(eventStartDatetime);
                             assertThat(event.eventEndDatetime()).isBeforeOrEqualTo(eventEndDatetime);
                         });
-        verify(eventRepository).findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+        then(eventRepository).should().findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
 
     }
 
@@ -95,7 +96,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).hasValue(eventDTO);
-        verify(eventRepository).findEvents(eventId);
+        then(eventRepository).should().findEvents(eventId);
     }
 
     @DisplayName("이벤트 ID로 존재하는 이벤트를 조회하면, 빈 정보를 출력하여 보여준다.")
@@ -111,7 +112,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isEmpty();
-        verify(eventRepository).findEvents(eventId);
+        then(eventRepository).should().findEvents(eventId);
     }
 
     @DisplayName("이벤트 정보를 주면, 이벤트를 생성하고 결과를 true 로 보여준다.")
@@ -127,7 +128,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isTrue();
-        verify(eventRepository).insertEvent(dto);
+        then(eventRepository).should().insertEvent(dto);
     }
 
     @DisplayName("이벤트 정보를 주지 않으면, 생성 중단하고 결과를 false 로 보여준다")
@@ -142,7 +143,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isFalse();
-        verify(eventRepository).insertEvent(null);
+        then(eventRepository).should().insertEvent(null);
     }
 
     @DisplayName("이벤트 ID와 정보를 주면, 이벤트 정보를 변경하고 결과를 true 로 보여준다.")
@@ -159,7 +160,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isTrue();
-        verify(eventRepository).updateEvent(eventId, dto);
+        then(eventRepository).should().updateEvent(eventId, dto);
     }
 
     @DisplayName("이벤트 ID를 주지 않으면, 이벤트 정보 변경을 중단하고 결과를 false 로 보여준다.")
@@ -175,7 +176,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isFalse();
-        verify(eventRepository).updateEvent(null, dto);
+        then(eventRepository).should().updateEvent(null, dto);
     }
 
     @DisplayName("이벤트 ID를 주고 변경할 정보를 주지 않으면, 이벤트 정보 변경을 중단하고 결과를 false 로 보여준다.")
